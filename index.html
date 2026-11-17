@@ -1,122 +1,151 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma Bibliothèque</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 30px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-        }
-
-        table {
-            width: 80%;
-            margin: 30px auto;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0 2px 8px #ccc;
-        }
-
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background-color: #3498db;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .disponible {
-            color: green;
-            font-weight: bold;
-        }
-
-        .emprunte {
-            color: red;
-            font-weight: bold;
-        }
-    </style>
+    <meta name="theme-color" content="#f5f7fb">
+    <meta name="description" content="Gérez facilement votre collection de livres avec Smart Library.">
+    <title>Smart Library — Ma bibliothèque</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
 </head>
-
 <body>
+    <div class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="#" aria-label="Smart Library, accueil">
+                <span class="brand-mark" aria-hidden="true">SL</span>
+                <span>smart<span class="brand-accent">library</span></span>
+            </a>
+            <span class="topbar-note"><span class="topbar-dot" aria-hidden="true"></span> Votre collection personnelle</span>
+        </header>
 
-    <h1>📚 Ma Bibliothèque</h1>
+        <main>
+            <section class="intro" aria-labelledby="page-title">
+                <div>
+                    <p class="eyebrow">ESPACE BIBLIOTHÈQUE</p>
+                    <h1 id="page-title">Vos livres,<br class="mobile-break"> toujours à portée de main.</h1>
+                    <p class="intro-copy">Organisez votre collection et gardez un œil sur vos lectures.</p>
+                </div>
+                <div class="intro-decoration" aria-hidden="true">
+                    <span class="decoration-book decoration-book-one"></span>
+                    <span class="decoration-book decoration-book-two"></span>
+                    <span class="decoration-book decoration-book-three"></span>
+                </div>
+            </section>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Titre</th>
-                <th>Auteur</th>
-                <th>Catégorie</th>
-                <th>Année</th>
-                <th>Disponibilité</th>
-            </tr>
-        </thead>
+            <section class="stats-grid" aria-label="Résumé de votre collection">
+                <article class="stat-card">
+                    <span class="stat-icon stat-icon-total" aria-hidden="true">▤</span>
+                    <div><p class="stat-label">Total des livres</p><p class="stat-value" id="total-count">0</p></div>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-icon stat-icon-available" aria-hidden="true">✓</span>
+                    <div><p class="stat-label">Disponibles</p><p class="stat-value" id="available-count">0</p></div>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-icon stat-icon-loaned" aria-hidden="true">↗</span>
+                    <div><p class="stat-label">Empruntés</p><p class="stat-value" id="loaned-count">0</p></div>
+                </article>
+            </section>
 
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>Les Misérables</td>
-                <td>Victor Hugo</td>
-                <td>Roman</td>
-                <td>1862</td>
-                <td class="disponible">Disponible</td>
-            </tr>
+            <div class="notice" id="notice" role="status" aria-live="polite" hidden></div>
 
-            <tr>
-                <td>2</td>
-                <td>L'Étranger</td>
-                <td>Albert Camus</td>
-                <td>Roman</td>
-                <td>1942</td>
-                <td class="emprunte">Emprunté</td>
-            </tr>
+            <div class="content-grid">
+                <section class="panel form-panel" aria-labelledby="form-title">
+                    <div class="panel-heading">
+                        <div>
+                            <p class="eyebrow">VOTRE COLLECTION</p>
+                            <h2 id="form-title">Ajouter un livre</h2>
+                        </div>
+                        <span class="heading-icon" aria-hidden="true">＋</span>
+                    </div>
+                    <p class="panel-description">Renseignez les informations de votre livre.</p>
 
-            <tr>
-                <td>3</td>
-                <td>Le Petit Prince</td>
-                <td>Antoine de Saint-Exupéry</td>
-                <td>Conte</td>
-                <td>1943</td>
-                <td class="disponible">Disponible</td>
-            </tr>
+                    <form id="book-form">
+                        <input type="hidden" id="book-id">
+                        <div class="field">
+                            <label for="title">Titre <span class="required-mark" aria-hidden="true">*</span></label>
+                            <input id="title" name="title" type="text" maxlength="160" placeholder="Ex. Le Petit Prince" required>
+                        </div>
+                        <div class="field">
+                            <label for="author">Auteur <span class="required-mark" aria-hidden="true">*</span></label>
+                            <input id="author" name="author" type="text" maxlength="120" placeholder="Ex. Antoine de Saint-Exupéry" required>
+                        </div>
+                        <div class="field-row">
+                            <div class="field">
+                                <label for="category">Catégorie <span class="required-mark" aria-hidden="true">*</span></label>
+                                <input id="category" name="category" type="text" maxlength="60" placeholder="Ex. Roman" required>
+                            </div>
+                            <div class="field">
+                                <label for="isbn">ISBN <span class="optional-mark">Facultatif</span></label>
+                                <input id="isbn" name="isbn" type="text" maxlength="30" placeholder="Ex. 978-2-07-..." autocomplete="off">
+                            </div>
+                        </div>
+                        <p class="form-hint"><span aria-hidden="true">*</span> Champs obligatoires</p>
+                        <div class="form-actions">
+                            <button class="button button-primary" id="submit-button" type="submit">
+                                <span aria-hidden="true">＋</span> Ajouter le livre
+                            </button>
+                            <button class="button button-secondary" id="cancel-edit" type="button" hidden>Annuler</button>
+                        </div>
+                    </form>
+                </section>
 
-            <tr>
-                <td>4</td>
-                <td>Clean Code</td>
-                <td>Robert C. Martin</td>
-                <td>Informatique</td>
-                <td>2008</td>
-                <td class="disponible">Disponible</td>
-            </tr>
+                <section class="panel library-panel" aria-labelledby="library-title">
+                    <div class="library-heading">
+                        <div>
+                            <p class="eyebrow">TOUS VOS OUVRAGES</p>
+                            <h2 id="library-title">Ma bibliothèque <span class="title-count" id="visible-count">0</span></h2>
+                        </div>
+                    </div>
 
-            <tr>
-                <td>5</td>
-                <td>Design Patterns</td>
-                <td>Erich Gamma et al.</td>
-                <td>Informatique</td>
-                <td>1994</td>
-                <td class="emprunte">Emprunté</td>
-            </tr>
-        </tbody>
-    </table>
+                    <div class="toolbar">
+                        <label class="search-box" for="search">
+                            <span class="search-icon" aria-hidden="true"></span>
+                            <input id="search" type="search" placeholder="Rechercher un titre ou un auteur..." autocomplete="off">
+                        </label>
+                        <div class="filter-row">
+                            <label class="select-wrap">
+                                <span class="sr-only">Filtrer par statut</span>
+                                <select id="status-filter">
+                                    <option value="all">Tous les statuts</option>
+                                    <option value="DISPONIBLE">Disponibles</option>
+                                    <option value="EMPRUNTE">Empruntés</option>
+                                </select>
+                            </label>
+                            <label class="select-wrap">
+                                <span class="sr-only">Filtrer par catégorie</span>
+                                <select id="category-filter">
+                                    <option value="all">Toutes les catégories</option>
+                                </select>
+                            </label>
+                            <label class="select-wrap sort-select">
+                                <span class="sr-only">Trier les livres</span>
+                                <select id="sort-order">
+                                    <option value="newest">Plus récents</option>
+                                    <option value="oldest">Plus anciens</option>
+                                    <option value="title-asc">Titre (A à Z)</option>
+                                    <option value="title-desc">Titre (Z à A)</option>
+                                    <option value="author-asc">Auteur (A à Z)</option>
+                                    <option value="author-desc">Auteur (Z à A)</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
 
+                    <div class="book-list" id="book-list" aria-live="polite" aria-busy="false"></div>
+                    <div class="empty-state" id="empty-state" hidden>
+                        <span class="empty-icon" aria-hidden="true">▤</span>
+                        <h3 id="empty-title">Votre bibliothèque est encore vide</h3>
+                        <p id="empty-message">Ajoutez votre premier livre avec le formulaire pour commencer votre collection.</p>
+                        <button class="text-button" id="add-first-book" type="button" hidden>Ajouter mon premier livre</button>
+                        <button class="text-button" id="reset-filters" type="button" hidden>Effacer la recherche et les filtres</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="footer">Fait avec soin pour les amoureux des livres <span aria-hidden="true">✦</span></footer>
+    </div>
 </body>
 </html>
